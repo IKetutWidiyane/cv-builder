@@ -49,6 +49,17 @@ describe("evaluate", () => {
     expect(issueNames).toContain("Responsibility without ownership");
   });
 
+  it("flags buzzword overuse when 5+ anti-patterns match", async () => {
+    const result = await evaluate({
+      cv: { content: weakCV, format: "markdown" },
+    });
+
+    const buzzwordIssue = result.issues.find((i) => i.element === "Buzzword overuse");
+    expect(buzzwordIssue).toBeDefined();
+    expect(buzzwordIssue?.severity).toBe("critical");
+    expect(buzzwordIssue?.why).toContain("cliche");
+  });
+
   it("finds strengths in strong CVs", async () => {
     const result = await evaluate({
       cv: { content: strongCV, format: "markdown" },

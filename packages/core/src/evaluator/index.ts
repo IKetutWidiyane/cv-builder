@@ -182,6 +182,16 @@ function findIssues(cv: string, _archetype: RoleArchetype) {
       });
     }
   }
+
+  // Buzzword overuse: if 5+ anti-patterns matched, surface a critical issue
+  if (issues.length >= 5) {
+    issues.push({
+      element: "Buzzword overuse",
+      why: `Your CV triggered ${issues.length} cliche patterns. This signals AI-generated or template-copied content to screeners.`,
+      fix: "Replace each flagged phrase with a specific achievement. One real number beats ten adjectives.",
+      severity: "critical",
+    });
+  }
   // Word count heuristic: CVs >800 words (~2 pages), >1000 clearly too long
   const wordCount = cv.trim() ? cv.trim().split(/\s+/).length : 0;
 
